@@ -1,0 +1,1 @@
+﻿select 'The person who travelled the furthest as the crow flies to be here today is ' || Title, Forename, Surname, Distance_From_North from qgpl.person as Answer where Distance_From_North = (select max(Distance_From_North) from qgpl.person);
