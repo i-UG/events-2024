@@ -14,44 +14,31 @@
 
 import sqlite3
 
-# Function to create the "students" table
-def create_table():
-    conn = sqlite3.connect('students.db')
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS students (
-                 id INTEGER PRIMARY KEY,
-                 name TEXT,
-                 age INTEGER,
-                 city TEXT)''')
-    conn.commit()
-    conn.close()
+# Create a connection to the SQLite database
+conn = sqlite3.connect('employees.db')
 
-# Function to insert data into the "students" table
-def insert_data(name, age, city):
-    conn = sqlite3.connect('students.db')
-    c = conn.cursor()
-    c.execute('''INSERT INTO students (name, age, city)
-                 VALUES (?, ?, ?)''', (name, age, city))
-    conn.commit()
-    conn.close()
+# Create a cursor object to execute SQL queries
+c = conn.cursor()
 
-# Function to retrieve and print all rows from the "students" table
-def print_all_students():
-    conn = sqlite3.connect('students.db')
-    c = conn.cursor()
-    c.execute('''SELECT * FROM students''')
-    rows = c.fetchall()
-    for row in rows:
-        print(row)
-    conn.close()
+# Create a table named "employees"
+c.execute('''CREATE TABLE IF NOT EXISTS employees (
+             id INTEGER PRIMARY KEY,
+             name TEXT,
+             age INTEGER,
+             position TEXT,
+             salary REAL)''')
 
-# Create the "students" table
-create_table()
+# Insert 20 records into the "employees" table
+for i in range(1, 21):
+    name = f"Employee {i}"
+    age = 20 + i
+    position = "Manager" if i % 2 == 0 else "Developer"
+    salary = 50000 + (i * 1000)
+    c.execute('''INSERT INTO employees (name, age, position, salary)
+                 VALUES (?, ?, ?, ?)''', (name, age, position, salary))
 
-# Insert data into the "students" table
-insert_data('Alice', 20, 'London')
-insert_data('Bob', 21, 'Glasgow')
+# Commit the changes and close the connection
+conn.commit()
+conn.close()
 
-# Retrieve and print all rows from the "students" table
-print("All Students:")
-print_all_students()
+print("Database & table created successfully with 20 records.")
